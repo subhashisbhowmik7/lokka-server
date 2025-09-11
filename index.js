@@ -5,7 +5,7 @@ const { spawn } = require('child_process');
 const app = express();
 app.use(bodyParser.json());
 
-const lokka = spawn('npx', ['-y', '@merill/lokka'], {
+const lokka = spawn('cmd', ['/c', 'npx', '-y', '@merill/lokka'], {
   stdio: ['pipe', 'pipe', 'pipe'],
   env: {
     ...process.env,
