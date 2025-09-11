@@ -6,8 +6,8 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "@merill/lokka": "^latest",
-    "express": "^4.18.2",
-    "body-parser": "^1.20.2"
+    "@merill/lokka": "^0.3.0",
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2"
   }
 }
