@@ -17,6 +17,12 @@ let cachedTools = [];
 let toolsCacheTimestamp = null;
 let lokkaReady = false;
 
+console.log('Environment variables being passed to Lokka:', {
+  TENANT_ID: TENANT_ID ? '1✅' : 'TENANT_ID is required! ❌',
+  CLIENT_ID: CLIENT_ID ? '2✅' : 'CLIENT_ID is required! ❌',
+  CLIENT_SECRET: CLIENT_SECRET ? '3✅' : 'CLIENT_SECRET is required! ❌'
+});
+
 const lokka = spawn('cmd', ['/c', 'npx', '-y', '@merill/lokka'], {
   stdio: ['pipe', 'pipe', 'pipe'],
   env: {
@@ -25,6 +31,10 @@ const lokka = spawn('cmd', ['/c', 'npx', '-y', '@merill/lokka'], {
     CLIENT_ID: CLIENT_ID,
     CLIENT_SECRET: CLIENT_SECRET
   }
+});
+
+lokka.stderr.on('data', (data) => {
+    console.error(`[Lokka Error] ${data.toString()}`);
 });
 
 // Function to send request to Lokka and get response
@@ -116,7 +126,7 @@ function initializeLokka() {
         console.error('❌ Failed to fetch initial tools:', error.message);
         resolve(); // Still resolve to start the server
       }
-    }, 3000); // Wait 3 seconds for Lokka to initialize
+    }, 10000); // Wait 10 seconds for Lokka to initialize
   });
 }
 
