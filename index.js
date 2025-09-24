@@ -1,6 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { spawn } = require('child_process');
+require('dotenv').config();
+
+const { TENANT_ID, CLIENT_ID, CLIENT_SECRET } = process.env;
+
+if (!TENANT_ID || !CLIENT_ID || !CLIENT_SECRET) {
+  console.error('❌ FATAL: Missing one or more required environment variables: TENANT_ID, CLIENT_ID, CLIENT_SECRET.');
+  process.exit(1);
+} 
 
 const app = express();
 app.use(bodyParser.json());
@@ -13,9 +21,9 @@ const lokka = spawn('cmd', ['/c', 'npx', '-y', '@merill/lokka'], {
   stdio: ['pipe', 'pipe', 'pipe'],
   env: {
     ...process.env,
-    TENANT_ID: process.env.TENANT_ID,
-    CLIENT_ID: process.env.CLIENT_ID,
-    CLIENT_SECRET: process.env.CLIENT_SECRET
+    TENANT_ID: TENANT_ID,
+    CLIENT_ID: CLIENT_ID,
+    CLIENT_SECRET: CLIENT_SECRET
   }
 });
 
