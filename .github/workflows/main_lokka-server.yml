@@ -28,6 +28,9 @@ jobs:
           npm install
           npm run build --if-present
       
+      - name: Remove node_modules before artifact upload
+        run: rmdir /s /q node_modules
+      
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
