@@ -127,7 +127,7 @@ function initializeLokka() {
       lokkaReady = true;
       console.log('✅ Lokka is ready');
       //set a delay before fetching tools
-      await new Promise(resolve => setTimeout(resolve, 15000));
+      await new Promise(resolve => setTimeout(resolve, 40000));
       
       try {
         await fetchToolsFromLokka();
@@ -136,7 +136,7 @@ function initializeLokka() {
         console.error('❌ Failed to fetch initial tools:', error.message);
         resolve(); // Still resolve to start the server
       }
-    }, 10000); // Wait 10 seconds for Lokka to initialize
+    }, 15000); // Wait 15 seconds for Lokka to initialize
   });
 }
 
