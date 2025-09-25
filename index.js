@@ -33,7 +33,7 @@ console.log('Environment variables being passed to Lokka:', {
 //   }
 // });
 
-const lokka = spawn('cmd', ['/c', 'node_modules\\.bin\\lokka'], {
+const lokka = spawn('cmd', ['/c', 'npm', 'run', 'lokka:start'], {
   stdio: ['pipe', 'pipe', 'pipe'],
   env: {
     ...process.env,
