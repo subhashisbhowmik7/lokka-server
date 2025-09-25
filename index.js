@@ -33,8 +33,9 @@ console.log('Environment variables being passed to Lokka:', {
 //   }
 // });
 
-const lokka = spawn('cmd', ['/c', 'npm', 'run', 'lokka:start'], {
+const lokka = spawn('cmd', ['/c', 'npm run lokka:start'], {
   stdio: ['pipe', 'pipe', 'pipe'],
+  // No need for shell: true if we use cmd /c, but we keep the robust env.
   env: {
     ...process.env,
     TENANT_ID: TENANT_ID,
@@ -67,16 +68,33 @@ function sendLokkaRequest(requestBody) {
       // console.log('[Lokka Raw Output]', buffer);
 
       if (buffer.includes('\n')) {
-        clearTimeout(timeout);
-        lokka.stdout.off('data', onData);
+        // Split the buffer by newline to handle multiple messages/shell lines
+        const lines = buffer.split('\n');
+        
+        for (const line of lines) {
+          const trimmedLine = line.trim();
+          
+          // Check if the line is NOT empty and STARTS with { (a valid JSON object)
+          if (trimmedLine.length > 0 && trimmedLine.startsWith('{')) {
+            // FOUND VALID JSON RESPONSE, process it
+            clearTimeout(timeout);
+            lokka.stdout.off('data', onData);
 
-        try {
-          const parsed = JSON.parse(buffer.trim());
-          resolve(parsed);
-        } catch (err) {
-          console.error("Parsing error:", err);
-          reject(new Error(`Invalid JSON from Lokka: ${err.message}`));
+            try {
+              // Parse the valid JSON line
+              const parsed = JSON.parse(trimmedLine);
+              resolve(parsed);
+              return; // Exit once a valid JSON response is resolved
+            } catch (err) {
+              console.error("Parsing error (on valid line):", err);
+              reject(new Error(`Invalid JSON from Lokka: ${err.message}`));
+              return;
+            }
+          }
         }
+        
+        // If no valid JSON was found, clear the buffer and wait for more data
+        buffer = ''; 
       }
     };
 
