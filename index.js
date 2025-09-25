@@ -18,12 +18,22 @@ let toolsCacheTimestamp = null;
 let lokkaReady = false;
 
 console.log('Environment variables being passed to Lokka:', {
-  TENANT_ID: TENANT_ID ? '1✅' : 'TENANT_ID is required! ❌',
-  CLIENT_ID: CLIENT_ID ? '2✅' : 'CLIENT_ID is required! ❌',
-  CLIENT_SECRET: CLIENT_SECRET ? '3✅' : 'CLIENT_SECRET is required! ❌'
+  TENANT_ID: TENANT_ID ? 'TENANT_ID is set! ✅' : 'TENANT_ID is required! ❌',
+  CLIENT_ID: CLIENT_ID ? 'CLIENT_ID is set! ✅' : 'CLIENT_ID is required! ❌',
+  CLIENT_SECRET: CLIENT_SECRET ? 'CLIENT_SECRET is set! ✅' : 'CLIENT_SECRET is required! ❌'
 });
 
-const lokka = spawn('cmd', ['/c', 'npx', '-y', '@merill/lokka'], {
+// const lokka = spawn('cmd', ['/c', 'npx', '-y', '@merill/lokka'], {
+//   stdio: ['pipe', 'pipe', 'pipe'],
+//   env: {
+//     ...process.env,
+//     TENANT_ID: TENANT_ID,
+//     CLIENT_ID: CLIENT_ID,
+//     CLIENT_SECRET: CLIENT_SECRET
+//   }
+// });
+
+const lokka = spawn('cmd', ['/c', 'node_modules\\.bin\\lokka'], {
   stdio: ['pipe', 'pipe', 'pipe'],
   env: {
     ...process.env,
