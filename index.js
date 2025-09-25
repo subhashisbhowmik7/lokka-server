@@ -24,25 +24,31 @@ console.log('Environment variables being passed to Lokka:', {
 });
 
 // const lokka = spawn('cmd', ['/c', 'npx', '-y', '@merill/lokka'], {
-//   stdio: ['pipe', 'pipe', 'pipe'],
+//   stdio: ["pipe", "pipe", "pipe"],
 //   env: {
 //     ...process.env,
-//     TENANT_ID: TENANT_ID,
-//     CLIENT_ID: CLIENT_ID,
-//     CLIENT_SECRET: CLIENT_SECRET
+//     TENANT_ID,
+//     CLIENT_ID,
+//     CLIENT_SECRET
 //   }
 // });
 
-const lokka = spawn("cmd", ["/c", "npx -y @merill/lokka"], {
+
+const LOKKA_CORE_PATH = 'node_modules/@merill/lokka/build/main.js';
+
+// The command should run the 'node' executable with the path to the main file.
+const lokka = spawn('node', [LOKKA_CORE_PATH], {
   stdio: ['pipe', 'pipe', 'pipe'],
-  // No need for shell: true if we use cmd /c, but we keep the robust env.
+  // No need for shell: true here because 'node' is an executable that is found,
+  // and the core logic is what we want to execute.
   env: {
     ...process.env,
-    TENANT_ID: TENANT_ID,
-    CLIENT_ID: CLIENT_ID,
-    CLIENT_SECRET: CLIENT_SECRET
+    TENANT_ID,
+    CLIENT_ID,
+    CLIENT_SECRET
   }
 });
+
 
 lokka.stderr.on('data', (data) => {
     console.error(`[Lokka Error] ${data.toString()}`);
@@ -267,7 +273,7 @@ app.post('/mcp', (req, res) => {
 
   const onData = (chunk) => {
     buffer += chunk.toString();
-    //console.log('[Lokka Raw Output]', buffer);
+    console.log('[Lokka Raw Output]', buffer);
 
     // Process once we see a newline (Lokka outputs line-delimited JSON)
     if (buffer.includes('\n')) {
