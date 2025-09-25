@@ -33,7 +33,7 @@ console.log('Environment variables being passed to Lokka:', {
 //   }
 // });
 
-const lokka = spawn('cmd', ['/c', 'npm run lokka:start'], {
+const lokka = spawn("cmd", ["/c", "npx -y @merill/lokka"], {
   stdio: ['pipe', 'pipe', 'pipe'],
   // No need for shell: true if we use cmd /c, but we keep the robust env.
   env: {
